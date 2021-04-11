@@ -1,7 +1,36 @@
 ﻿
 // :::::::::::::::::::::: VARIABLES GLOBALES ::::::::::::::::::::::
+var loginJSON = {
+    Usuario: null,
+    Password: null,
+    ClaveTienda: null,
+};
 
 // :::::::::::::::::::::: CONTROLLERS OBJETOS DOM ::::::::::::::::::::::
+
+// DOCUMENT - BOTON QUE GENERA LA FUNCION DE LOGIN
+$(document).on('click', '#btn-login', function (e) {
+    if (validateLoginForm()) {
+        $.ajax({
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            url: "/Login/IniciarSesion",
+            dataType: 'JSON',
+            data: { login: loginJSON },
+            beforeSend: function () {
+                isBusy(true);
+            },
+            success: function (data) {
+                console.log(data);
+                isBusy(false);
+            },
+            error: function (error) {
+                console.log(error);
+                isBusy(false);
+            }
+        });
+    }
+});
 
 // :::::::::::::::::::::: FUNCIONES GENERALES ::::::::::::::::::::::
 // FUNCION DE ARRANQUE
@@ -10,6 +39,26 @@ $(function () {
         $('.input100').val('');
     }, 1000);
 });
+
+// FUNCION QUE VALIDA EL FORMULARIO DE LOGIN
+function validateLoginForm() {
+    var correcto = false, msg = "";
+    if ($('#user-login').val() === "") {
+        msg = "Coloque el Usuario";
+        $('#user-login').focus();
+    } else if ($('#password-login').val() === "") {
+        msg = "Coloque la Contraseña";
+        $('#password-login').focus();
+    } else {
+        correcto = true;
+        loginJSON.Usuario = $('#user-login').val();
+        loginJSON.Password = $('#password-login').val();
+    }
+    if (!correcto) {
+        msgPop("Atención", msg, 2500, "warning");
+    }
+    return correcto;
+}
 
 // FUNCION QUE EJECUTA LOS VALIDADORES
 (function ($) {
