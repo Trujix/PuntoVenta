@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PVenta.Models;
 
@@ -12,7 +13,26 @@ namespace PVenta.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            if (VerificarSessionVars())
+            {
+                return RedirectToAction("Principal");    
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        public IActionResult Principal()
+        {
+            if (VerificarSessionVars())
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         public IActionResult About()
@@ -27,6 +47,11 @@ namespace PVenta.Controllers
             ViewData["Message"] = "Your contact page.";
 
             return View();
+        }
+
+        public bool VerificarSessionVars()
+        {
+            return HttpContext.Session.GetString("Token") != null;
         }
 
         public IActionResult Privacy()

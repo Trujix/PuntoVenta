@@ -22,7 +22,7 @@ $(document).on('click', '#btn-login', function (e) {
             },
             success: function (data) {
                 console.log(data);
-                isBusy(false);
+                location.reload();
             },
             error: function (error) {
                 console.log(error);

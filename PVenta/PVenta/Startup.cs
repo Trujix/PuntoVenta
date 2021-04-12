@@ -27,17 +27,27 @@ namespace PVenta
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => /*true SESSION */false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            /* SESSION */
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin", builder =>
+                builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // SESSIONS VARS
+            /* SESSION */
             services.AddDistributedMemoryCache();
-            services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(20);  
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(1440);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
         }
 
@@ -58,7 +68,7 @@ namespace PVenta
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            // SESSIONS VARS
+            /* SESSION */
             app.UseSession();
 
             app.UseMvc(routes =>

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PVenta.Models;
-using PVenta.Utilities;
 
 namespace PVenta.Controllers
 {
@@ -14,10 +14,10 @@ namespace PVenta.Controllers
         {
             try
             {
-                
-                if(login.Usuario == "adm" && login.Password == "123")
+                if (login.Usuario == "adm" && login.Password == "123")
                 {
-                    return "true" + Session.ObtenerSessionVar("Token");
+                    CrearSessionVars();
+                    return "true";
                 }
                 else
                 {
@@ -28,6 +28,11 @@ namespace PVenta.Controllers
             {
                 return e.ToString();
             }
+        }
+
+        public void CrearSessionVars()
+        {
+            HttpContext.Session.SetString("Token", "445217");
         }
     }
 }
