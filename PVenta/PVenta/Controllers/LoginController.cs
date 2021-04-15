@@ -29,7 +29,18 @@ namespace PVenta.Controllers
                 return e.ToString();
             }
         }
-
+        public string CerrarSesion()
+        {
+            try
+            {
+                HttpContext.Session.Remove("Token");
+                return "true";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message.ToString();
+            }
+        }
         public void CrearSessionVars()
         {
             HttpContext.Session.SetString("Token", "445217");
