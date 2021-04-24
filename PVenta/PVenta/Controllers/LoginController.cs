@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PVenta.Models;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace PVenta.Controllers
 {
     public class LoginController : Controller
     {
+        public LoginController([FromServices] IConfiguration config)
+        {
+            
+        }
+
         public string IniciarSesion(Login login)
         {
             try
@@ -29,6 +34,7 @@ namespace PVenta.Controllers
                 return e.ToString();
             }
         }
+
         public string CerrarSesion()
         {
             try
@@ -41,6 +47,7 @@ namespace PVenta.Controllers
                 return ex.Message.ToString();
             }
         }
+
         public void CrearSessionVars()
         {
             HttpContext.Session.SetString("Token", "445217");
